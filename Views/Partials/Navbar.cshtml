@@ -1,0 +1,31 @@
+﻿@* @inherits Umbraco.Cms.Web.Common.Macros.PartialViewMacroPage *@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	var items = Umbraco.ContentAtRoot();
+	var selection = Umbraco.ContentAtRoot().FirstOrDefault()
+	.Children()
+	.Where(x => x.IsVisible());
+
+	var homePage = Umbraco.AssignedContentItem.AncestorOrSelf<Home>();
+	var navigationItems = homePage.Children().Where(x => x.IsVisible());
+
+	var currPageId = Umbraco.AssignedContentItem.Id;
+	var root = Model.Content.AncestorOrSelf(1);
+}
+<!--
+
+
+ -->
+
+<ul>
+	<li>
+		<a class="@(homePage.Id == currPageId ? "active" : null)" href="@homePage.Url()">@homePage.Name()</a>
+	</li>
+	@foreach (var item in navigationItems)
+	{
+		<li>
+			<a class="@(item.Id == currPageId ? "active" : null)" href="@item.Url()">@item.Name()</a>
+		</li>
+	}
+</ul>
+<h2>@Umbraco.AssignedContentItem.Id</h2>
